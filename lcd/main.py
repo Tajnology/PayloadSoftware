@@ -36,7 +36,7 @@ FONT_SIZE = 20
 
 
 #### LOAD FONT ####
-font = ImageFont.truetype("Roboto-Medium.ttf",15)
+font = ImageFont.truetype("Roboto-Medium.ttf",size=15)
 
 
 #### GLOBAL VARIABLES ####
@@ -57,7 +57,7 @@ def main(argv):
 
     disp.begin() # Initialize the LCD.
 
-    while(true):
+    while(True):
         current_display = utils.get_display_mode()
 
         # Render and display image on LCD

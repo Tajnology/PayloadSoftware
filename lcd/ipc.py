@@ -12,11 +12,11 @@ def init():
 
     @sio.on(RECEIVE_IMAGE_EVENT)
     def receive_image(sid, data):
-        main.set_target_image(data["image"])
+        set_target_image(data["image"])
 
     @sio.on(RECEIVE_TEMPERATURE_EVENT)
     def receive_temperature(sid, data):
-        main.set_temperature(data["temperature"])
+        set_temperature(data["temperature"])
 
     @sio.event
     def disconnect(sid):

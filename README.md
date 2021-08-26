@@ -35,7 +35,7 @@ Manual for the command-line options of each Python script.
 ### Python packages
 pip3
 
-Requirements.txt contains the list of Pip packages that need to be installed.
+Requirements.txt contains the list of Pip packages that need to be installed. (sudo pip install -r requirements.txt)
 ### OpenCV
 libopencv-dev
 python3-opencv

@@ -5,8 +5,9 @@ sio_send_connected = False
 sio_send = None
 
 def init():
-    sio_recv = socketio.Server()
-    app = socketio.WGSIApp(sio_recv)
+    mgr = socketio.RedisManager('redis://localhost:' + str(TRANSMISSION_PORT))
+    sio_recv = socketio.Server(client_manager = mgr)
+    app = socketio.WSGIApp(sio_recv)
 
     @sio_recv.event
     def connect(sid, environ, auth):
