@@ -36,7 +36,7 @@ FONT_SIZE = 20
 
 
 #### LOAD FONT ####
-font = ImageFont.truetype("Roboto-Medium.ttf",)
+font = ImageFont.truetype("Roboto-Medium.ttf",15)
 
 
 #### GLOBAL VARIABLES ####
@@ -62,22 +62,26 @@ def main(argv):
 
         # Render and display image on LCD
         if(current_display == 0):
+            pass
             # Draw IP to display
         elif(current_display == 1):
             if(target_image != None):
                 target_image_mutex.acquire()
 
                 try:
+                    pass
                     # Draw Target Image to display
                 finally:
                     target_image_mutex.release()
             else:
+                pass
                 # Draw a 'no image found icon'
         elif(current_display == 2):
             if(temperature != None):
                 temperature_mutex.acquire()
 
                 try:
+                    pass
                     # Draw Temperature to display
                 finally:
                     temperature_mutex.release()

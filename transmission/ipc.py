@@ -5,7 +5,7 @@ sio_send_connected = False
 sio_send = None
 
 def init():
-    sio_recv = socketio.Server(TRANSMISSION_PORT)
+    sio_recv = socketio.Server()
     app = socketio.WGSIApp(sio_recv)
 
     @sio_recv.event
