@@ -1,69 +1,69 @@
 import getopt   # getopt.getopt()
-import select   # select()
 import socket   # socket.socket(), obj.setblocking(), obj.bind(), obj.listen()
+import threading
+import time
 import sys
-import Queue
+from PIL import Image
+import ST7735 as ST7735
+from enum import Enum
 
-target_address = ('localhost',10002)
-air_address = ('localhost',10003)
+# Import other files in subsystem
+import ipc
+import utils
 
-target_queue = Queue.Queue()
-air_queue = Queue.Queue()
+# Create the display
+disp = ST7735.ST7735(
+    port=0,
+    cs = ST7735.BG_SPI_CS_FRONT,
+    dc = 9,
+    backlight = 19,
+    rotation = 90,
+    spi_speed_hz = 4000000
+)
 
-target_connection = None
-air_connection = None
+WIDTH = disp.width
+HEIGHT = disp.height
 
-def handle_target_data():
-    # Do stuff
+# Constants
+REFRESH_INTERVAL = 0.01
 
-def handle_air_data():
-    # Do sftuff
+TARGET_PORT = 10002
+AIR_PORT = 10003
+
+class LCDData:
+    ip = utils.get_ip()
+    target_image = Image.new('RGB', (WIDTH,HEIGHT), color = 'red')
+    temperature = 30
+    current_display = 0 # 0 = IP, 1 = Target, 2 = Air
+
+#### MAIN ####
 
 def main(argv):
-    # Create a TCP/IP socket
-    target = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    target.setblocking(0)
+    # Establish IPC
+    target_thread = threading.Thread(target = ipc.listen_handler,args=(TARGET_PORT,ipc.handle_target_data))
+    target_thread.start()
 
-    air = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    air.setblocking(0)
+    air_thread = threading.Thread(target = ipc.listen_handler,args=(AIR_PORT,ipc.handle_air_data))
+    air_thread.start()
 
-    # Bind the socket to the port
-    target.bind(target_address)
-    air.bind(air_address)
+    # Initialize the LCD.
+    disp.begin()
 
-    # Listen for a single client on each port
-    target.listen(1)
-    air.listen(1)
+    while(true):
+        render_image = Image.new('RGB',(WIDTH,HEIGHT), color='white')
 
-    # Create arguments for select()
-    inputs = [target, air]
-    outputs = []
-    
-    
+        if(current_display == 0):
+            # Draw IP to display
+        elif(current_display == 1):
+            # Draw Target Image to display
+        elif(current_display == 2):
+            # Draw Temperature to display
+        
+        disp.display(render_image)
 
-    while inputs:
-        readable, writable, exceptional = select.select(inputs,outputs,inputs)
+        LCDData.current_display = utils.get_display_mode()
 
-        # Handle inputs
-        for sock in readable:
-            if target and sock is target:
-                target_connection, target_address = sock.accept()
-                target_connection.setblocking(0)
-                inputs.remove(target)
-                inputs.append(target_connection)
-            elif air and sock is air:
-                air_connection, target_address = sock.accept()
-                air_connection.setblocking(0)
-                inputs.remove(air)
-                inputs.append(air_connection)
-            elif target_connection and sock is target_connection:
-                # Get the data from the target detection subsystem
-            elif air_connection and sock is air_connection:
-                # Get the data from the air quality subsystem
-
-                
-
-
+        time.sleep(REFRESH_INTERVAL)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
