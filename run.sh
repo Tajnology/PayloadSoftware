@@ -1,6 +1,7 @@
 #!/bin/bash
+# Run as super-user
 
-python transmission/main.py
-python lcd/main.py
-python target_detection/main.py
-python air_quality/main.py
+sudo python transmission/main.py
+sudo python lcd/main.py
+sudo python target_detection/main.py
+sudo python air_quality/main.py

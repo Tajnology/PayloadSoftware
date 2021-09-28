@@ -1,6 +1,25 @@
-
+import socket
 def get_ip():
-    return "11.1.1.1"
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        # doesn't even have to be reachable
+        s.connect(('10.255.255.255', 1))
+        IP = s.getsockname()[0]
+    except Exception:
+        IP = '127.0.0.1'
+    finally:
+        s.close()
+    return IP
 
 def get_display_mode(display_mode_file):
+    file = open(display_mode_file,'r')
+
+    display_mode_str = file.read()
+
+    # TODO: Handle the string in the file 
+
     return 0
+
+
+
+
