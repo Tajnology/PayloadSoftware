@@ -3,7 +3,7 @@ import socketio
 from main import set_target_image, set_temperature, LCD_PORT, RECEIVE_IMAGE_EVENT, RECEIVE_TEMPERATURE_EVENT
 
 def init():
-    sio = socketio.AsyncServer(LCD_PORT)
+    sio = socketio.Server(LCD_PORT)
     app = socketio.AGSIApp(sio)
 
     @sio.event
@@ -11,11 +11,12 @@ def init():
         print('connect', sid)
 
     @sio.on(RECEIVE_IMAGE_EVENT)
-    def receive_image(sid, data)
+    def receive_image(sid, data):
         # Receive image from target detection subprogram
         pass
 
     @sio.on(RECEIVE_TEMPERATURE_EVENT)
+    def receive_temperature():
         # Receive temperature data from air quality subprogram
         pass
 
