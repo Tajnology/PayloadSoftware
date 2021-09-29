@@ -1,25 +1,24 @@
-import threading
-from main import LCDData
+import socketio
 
-#### IPC ####
+from main import set_target_image, set_temperature, LCD_PORT, RECEIVE_IMAGE_EVENT, RECEIVE_TEMPERATURE_EVENT
 
-def listen_handler(port_number,handle_function):
-    # Create a TCP/IP Socket
-    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.setblocking(1)
-    server.bind(('localhost',port_number))
-    server.listen(1)
+def init():
+    sio = socketio.AsyncServer(LCD_PORT)
+    app = socketio.AGSIApp(sio)
 
-    server_socket, client_address = server.accept()
-    server_socket.setblocking(1)
+    @sio.event
+    def connect(sid, environ, auth):
+        print('connect', sid)
 
-    server.close()
+    @sio.on(RECEIVE_IMAGE_EVENT)
+    def receive_image(sid, data)
+        # Receive image from target detection subprogram
+        pass
 
-    # Call the handler
-    handle_function(server_socket)
+    @sio.on(RECEIVE_TEMPERATURE_EVENT)
+        # Receive temperature data from air quality subprogram
+        pass
 
-def handle_target_data(target_socket):
-    # Read in the latest image
-
-def handle_air_data(air_socket):
-    # Read in the latest temperature
+    @sio.event
+    def disconnect(sid):
+        print('disconnect', sid)
