@@ -6,7 +6,6 @@ from threading import Lock
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
-from fonts.ttf import RobotoMedium as UserFont
 from enum import Enum
 import ST7735 as ST7735
 
@@ -27,11 +26,18 @@ disp = ST7735.ST7735(
 WIDTH = disp.width
 HEIGHT = disp.height
 
+
 #### GLOBAL CONSTANTS ####
 LCD_PORT = 10000
-REFRESH_INTERVAL = 0.01
+REFRESH_INTERVAL = 0.01 # seconds
 RECEIVE_IMAGE_EVENT = 'td-image'
 RECEIVE_TEMPERATURE_EVENT = 'air-data'
+FONT_SIZE = 20
+
+
+#### LOAD FONT ####
+font = ImageFont.truetype("Roboto-Medium.ttf",)
+
 
 #### GLOBAL VARIABLES ####
 ip = utils.get_ip()
@@ -40,6 +46,9 @@ target_image_mutex = Lock()
 temperature = None
 temperature_mutex = Lock()
 current_display = 0 # 0 = IP, 1 = Target, 2 = Air
+
+render_image = Image.new('RGB',(WIDTH,HEIGHT), color='white') # Create blank image
+draw = render_image.Draw(render_image)
 
 #### MAIN PROCEDURE ####
 def main(argv):
@@ -50,8 +59,6 @@ def main(argv):
 
     while(true):
         current_display = utils.get_display_mode()
-
-        render_image = Image.new('RGB',(WIDTH,HEIGHT), color='white') # Create blank image
 
         # Render and display image on LCD
         if(current_display == 0):
