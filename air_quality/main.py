@@ -10,12 +10,13 @@ bme280 = BME280()
 from enviroplus import gas
 
 #### LOCAL IMPORTS ####
-
+import ipc
 
 #### GLOBAL CONSTANTS ####
 LCD_PORT = 10000
 TRANSMISSION_PORT = 10001
 SAMPLE_INTERVAL = 1 # seconds
+
 
 class Data:
     def __init__(self,temperature,pressure,humidity,light,ox_gas,red_gas,amm_gas,noise_level):
@@ -31,6 +32,9 @@ class Data:
 
 def main(argv):
     # Establish IPC
+    ipc.init()
+
+    ipc.msg_transmission('status',{'heating': True})
 
 
 #### ENTRY POINT ####
