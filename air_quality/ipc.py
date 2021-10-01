@@ -37,4 +37,10 @@ def msg_transmission(key,value):
     else:
         transmission_sio.emit(key,value)
 
+def msg_lcd(key,value):
+    if(not lcd_connected):
+        print('Connection failed')
+        return
+    else:
+        lcd_sio.emit(key,value)
 

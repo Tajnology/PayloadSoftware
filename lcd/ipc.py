@@ -16,9 +16,8 @@ def init():
         pass
 
     @sio.on(RECEIVE_TEMPERATURE_EVENT)
-    def receive_temperature():
-        # Receive temperature data from air quality subprogram
-        pass
+    def receive_temperature(sid, data):
+        main.set_temperature(data["temperature"])
 
     @sio.event
     def disconnect(sid):
