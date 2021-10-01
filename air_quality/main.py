@@ -47,7 +47,7 @@ def main(argv):
         ipc.msg_transmission('air-data',data)
         ipc.msg_lcd('air-data',{'temperature':temp})
 
-        time.sleep(SAMPLE_INTERVAL)
+        time.sleep(SAMPLE_INTERVAL-NOISE_SAMPLE_DUR)
 
 #### ENTRY POINT ####
 if __name__ == "__main__":
