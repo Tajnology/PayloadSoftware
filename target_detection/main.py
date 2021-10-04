@@ -1,0 +1,9 @@
+
+
+
+#### LOCAL IMPORTS ####
+import ipc
+
+#### GLOBAL CONSTANTS ####
+LCD_PORT = 10000
+TRANSMISSION_PORT = 10001
