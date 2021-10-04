@@ -26,9 +26,10 @@ ARUCO_DICT = {
 	"DICT_APRILTAG_36h11": cv2.aruco.DICT_APRILTAG_36h11
 }
 
-# Returns an array of tuples representing the corners of an aruco marker
-# (starting at top left and moving clockwise) or None if no aruco
-# marker was detected 
+# Returns an array of dictionaries containing:
+# 'corners': a tuple of the corners of the detected aruco marker, clockwise starting at the top-left
+# 'id': an integer identifying the aruco marker
+# Returns None if no markers were detected
 def aruco_marker(frame,type):
     arucoDict = cv2.aruco.Dictionary_get(ARUCO_DICT[type])
     arucoParams = cv2.aruco.DetectorParameters_create()
@@ -37,14 +38,14 @@ def aruco_marker(frame,type):
     if len(corners) > 0:
         ids = ids.flatten()
 
-        markerBounds = []
+        markers = []
 
-        for (markerCorner,markerID) in zip(corners,ids):
+        for (markerCorners,markerID) in zip(corners,ids):
             # Extract the marker corners (top left, top right, bottom right, bottom left)
             # and append the tuple to the output array
-            markerBounds.append(markerCorner.reshape(4,2))
+            markers.append({'corners':markerCorner.reshape(4,2),'id':markerID})
 
-        return markerBounds
+        return markers
     else:
         return None
 
