@@ -4,7 +4,7 @@ from main import set_target_image, set_temperature, LCD_PORT, RECEIVE_IMAGE_EVEN
 
 def init():
     sio = socketio.Server(LCD_PORT)
-    app = socketio.AGSIApp(sio)
+    app = socketio.WGSIApp(sio)
 
     @sio.event
     def connect(sid, environ, auth):
@@ -12,8 +12,7 @@ def init():
 
     @sio.on(RECEIVE_IMAGE_EVENT)
     def receive_image(sid, data):
-        # Receive image from target detection subprogram
-        pass
+        main.set_target_image(data["image"])
 
     @sio.on(RECEIVE_TEMPERATURE_EVENT)
     def receive_temperature(sid, data):

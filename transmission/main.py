@@ -1,0 +1,6 @@
+
+#### LOCAL IMPORTS ####
+import ipc
+
+#### GLOBAL CONSTANTS ####
+TRANSMISSION_PORT = 10001

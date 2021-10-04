@@ -11,8 +11,8 @@ def init():
     lcd_sio = socketio.Client()
     transmission_sio = socketio.Client()
     
-    sio.connect('http://localhost:' + LCD_PORT)
-    sio.connect('http://localhost:' + TRANSMISSION_PORT)
+    lcd_sio.connect('http://localhost:' + LCD_PORT)
+    transmission_sio.connect('http://localhost:' + TRANSMISSION_PORT)
 
     @lcd_sio.on('connect')
     def lcd_connect():
