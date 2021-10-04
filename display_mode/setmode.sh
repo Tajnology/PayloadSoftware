@@ -11,13 +11,13 @@ read -p 'Selection: ' sel
 case $sel in
 0)
 echo "Changing display to IP"
-echo "IP" > display_mode.txt ;;
+echo "IP" > ~/PayloadSoftware/display_mode/display_mode.txt ;;
 1)
 echo "Changing display to Target Detection"
-echo "TARGET" > display_mode.txt ;;
+echo "TARGET" > ~/PayloadSoftware/display_mode/display_mode.txt ;;
 2)
 echo "Changing display to Temperature"
-echo "TEMP" > display_mode.txt ;;
+echo "TEMP" > ~/PayloadSoftware/display_mode/display_mode.txt ;;
 *)
 echo "Option invalid" ;;
 esac
