@@ -4,3 +4,7 @@ import ipc
 
 #### GLOBAL CONSTANTS ####
 TRANSMISSION_PORT = 10001
+RECEIVE_TD_DATA_EVENT = 'td-data'
+RECEIVE_TD_STATUS_EVENT = 'td-status'
+RECEIVE_AQ_DATA_EVENT = 'air-data'
+RECEIVE_AQ_STATUS_EVENT = 'air-data'

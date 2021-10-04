@@ -19,6 +19,8 @@ LCD_PORT = 10000
 TRANSMISSION_PORT = 10001
 SAMPLE_INTERVAL = 1 # seconds
 NOISE_SAMPLE_DUR = 0.5 # seconds
+TRANSMIT_AQ_DATA_EVENT = 'air-data'
+TRANSMIT_AQ_STATUS_EVENT = 'air-status'
 
 #### CREATE NOISE OBJECT ####
 noise = Noise(duration=NOISE_SAMPLE_DUR)
@@ -27,9 +29,9 @@ def main(argv):
     # Establish IPC
     ipc.init()
 
-    ipc.msg_transmission('status',{'heating': True})
+    ipc.msg_transmission(TRANSMIT_AQ_STATUS_EVENT,{'heating': True})
 
-    ipc.msg_transmission('status',{'heating': False})
+    ipc.msg_transmission(TRANSMIT_AQ_STATUS_EVENT,{'heating': False})
 
     while(True):
         # Microphone will block for up to half a seocond
@@ -44,8 +46,8 @@ def main(argv):
         'amm_gas':gas_data.nh3/1000,'noise_low':amp_low,
         'noise_mid':amd_mid,'noise_high':amp_high}
 
-        ipc.msg_transmission('air-data',data)
-        ipc.msg_lcd('air-data',{'temperature':temp})
+        ipc.msg_transmission(TRANSMIT_AQ_DATA_EVENT,data)
+        ipc.msg_lcd(TRANSMIT_AQ_DATA_EVENT,{'temperature':temp})
 
         time.sleep(SAMPLE_INTERVAL-NOISE_SAMPLE_DUR)
 
