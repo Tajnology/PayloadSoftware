@@ -1,10 +1,10 @@
 import socketio
+import eventlet
 
 import main
 
 def init():
-    mgr = socketio.RedisManager(channel='lcd')
-    sio = socketio.Server(client_manager = mgr)
+    sio = socketio.Server()
     app = socketio.WSGIApp(sio)
 
     @sio.event
@@ -22,3 +22,5 @@ def init():
     @sio.event
     def disconnect(sid):
         print('disconnect', sid)
+
+    eventlet.wsgi.server(eventlet.listen(('localhost',main.LCD_PORT)),app)

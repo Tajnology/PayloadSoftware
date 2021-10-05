@@ -36,7 +36,12 @@ def main(argv):
 
     while(True):
         # Microphone will block for up to half a seocond
-        amp_low, amp_mid, amp_high, amp_total = noise.get_noise_profile()
+        # TODO: fix microphone sensing
+        #amp_low, amp_mid, amp_high, amp_total = noise.get_noise_profile()
+        amp_low = 0
+        amp_mid = 0
+        amp_high = 0
+    
          
         gas_data = gas.read_all()
         temp = bme280.get_temperature()

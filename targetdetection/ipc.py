@@ -1,6 +1,6 @@
 import socketio
 
-import targetdetection.main
+import main
 
 lcd_connected = False
 transmission_connected = False
@@ -9,27 +9,35 @@ lcd_sio = None
 transmission_sio = None
 
 def init():
+    global lcd_sio
     lcd_sio = socketio.Client()
+    global transmission_sio
     transmission_sio = socketio.Client()
     
-    lcd_sio.connect('redis://localhost:' + targetdetection.main.LCD_PORT )
-    transmission_sio.connect('redis://localhost:' + targetdetection.main.TRANSMISSION_PORT)
-
-    @lcd_sio.on('connect')
-    def lcd_connect():
+    @lcd_sio.event
+    def connect():
+        global lcd_connected
         lcd_connected = True
 
-    @lcd_sio.on('disconnect')
-    def lcd_disconnect():
+    @lcd_sio.event
+    def disconnect():
+        global lcd_connected
         lcd_connected = False
 
-    @transmission_sio.on('connect')
-    def transmission_connect():
+    @transmission_sio.event
+    def connect():
+        global transmission_connected
         transmission_connected = True
 
-    @transmission_sio.on('disconnect')
-    def transmission_disconnect():
+    @transmission_sio.event
+    def disconnect():
+        global transmission_connected
         transmission_connected = False
+
+    
+    lcd_sio.connect('http://localhost:'+ str(main.LCD_PORT))
+    transmission_sio.connect('http://localhost:' + str(main.TRANSMISSION_PORT))
+
 
 def msg_transmission(key,value):
     if(not transmission_connected):

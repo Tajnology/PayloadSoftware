@@ -56,10 +56,15 @@ draw = ImageDraw.Draw(render_image)
 def main(argv):
     # Establish Inter-Process Communication
     ipc.init()
+    
+    print('TEST')
 
     disp.begin() # Initialize the LCD.
 
+   
+
     while(True):
+        global current_display
         current_display = utils.get_display_mode(DISPLAY_MODE_FILE)
 
         # Render and display image on LCD
@@ -83,7 +88,7 @@ def main(argv):
                 temperature_mutex.acquire()
 
                 try:
-                    pass
+                    print('LCD temperature variable: ' + str(temperature))
                     # Draw Temperature to display
                 finally:
                     temperature_mutex.release()
@@ -96,6 +101,7 @@ def main(argv):
 def set_target_image(image):
     target_image_mutex.acquire()
     try:
+        global target_image
         target_image = image
     finally:
         target_image_mutex.release()
@@ -104,7 +110,9 @@ def set_temperature(temp):
     temperature_mutex.acquire()
 
     try:
+        global temperature
         temperature = temp
+
     finally:
         temperature_mutex.release()
 
