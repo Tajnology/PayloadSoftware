@@ -1,5 +1,6 @@
 import socketio
-from main import LCD_PORT, TRANSMISSION_PORT
+
+import targetdetection.main
 
 lcd_connected = False
 transmission_connected = False
@@ -11,8 +12,8 @@ def init():
     lcd_sio = socketio.Client()
     transmission_sio = socketio.Client()
     
-    sio.connect('http://localhost:' + LCD_PORT)
-    sio.connect('http://localhost:' + TRANSMISSION_PORT)
+    lcd_sio.connect('http://localhost:' + targetdetection.main.LCD_PORT)
+    transmission_sio.connect('http://localhost:' + targetdetection.main.TRANSMISSION_PORT)
 
     @lcd_sio.on('connect')
     def lcd_connect():

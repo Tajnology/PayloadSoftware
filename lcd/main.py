@@ -10,8 +10,8 @@ from enum import Enum
 import ST7735 as ST7735
 
 #### LOCAL IMPORTS ####
-import ipc
-import utils
+import lcd.ipc
+import lcd.utils
 
 #### LCD HARDWARE DECLARATION ####
 disp = ST7735.ST7735(
@@ -40,7 +40,7 @@ font = ImageFont.truetype("Roboto-Medium.ttf",size=15)
 
 
 #### GLOBAL VARIABLES ####
-ip = utils.get_ip()
+ip = lcd.utils.get_ip()
 target_image = None
 target_image_mutex = Lock()
 temperature = None
@@ -48,17 +48,17 @@ temperature_mutex = Lock()
 current_display = 0 # 0 = IP, 1 = Target, 2 = Air
 
 render_image = Image.new('RGB',(WIDTH,HEIGHT), color='white') # Create blank image
-draw = render_image.Draw(render_image)
+draw = ImageDraw.Draw(render_image)
 
 #### MAIN PROCEDURE ####
 def main(argv):
     # Establish Inter-Process Communication
-    ipc.init()
+    lcd.ipc.init()
 
     disp.begin() # Initialize the LCD.
 
     while(True):
-        current_display = utils.get_display_mode()
+        current_display = lcd.utils.get_display_mode()
 
         # Render and display image on LCD
         if(current_display == 0):

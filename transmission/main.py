@@ -1,7 +1,8 @@
+import sys
 
 #### LOCAL IMPORTS ####
-import sys
-import ipc
+
+import transmission.ipc
 
 #### GLOBAL CONSTANTS ####
 TRANSMISSION_PORT = 10001
@@ -13,7 +14,7 @@ RECEIVE_AQ_STATUS_EVENT = 'air-data'
 
 
 def main(argv):
-    ipc.init()
+    transmission.ipc.init()
 
 if __name__ == "__main__":
     main(sys.argv[1:])

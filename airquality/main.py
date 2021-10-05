@@ -10,9 +10,10 @@ from bme280 import BME280
 bme280 = BME280()
 from enviroplus import gas
 from enviroplus.noise import Noise
+import sys
 
 #### LOCAL IMPORTS ####
-import ipc
+import airquality.ipc
 
 #### GLOBAL CONSTANTS ####
 LCD_PORT = 10000
@@ -27,11 +28,11 @@ noise = Noise(duration=NOISE_SAMPLE_DUR)
 
 def main(argv):
     # Establish IPC
-    ipc.init()
+    air_quality.ipc.init()
 
-    ipc.msg_transmission(TRANSMIT_AQ_STATUS_EVENT,{'heating': True})
+    air_quality.ipc.msg_transmission(TRANSMIT_AQ_STATUS_EVENT,{'heating': True})
 
-    ipc.msg_transmission(TRANSMIT_AQ_STATUS_EVENT,{'heating': False})
+    air_quality.ipc.msg_transmission(TRANSMIT_AQ_STATUS_EVENT,{'heating': False})
 
     while(True):
         # Microphone will block for up to half a seocond
@@ -44,10 +45,10 @@ def main(argv):
         'humidity':bme280.get_humidity(),'light':ltr559.get_lux(),
         'ox_gas':gas_data.oxidising/1000,'red_gas':gas_data.reducing/1000,
         'amm_gas':gas_data.nh3/1000,'noise_low':amp_low,
-        'noise_mid':amd_mid,'noise_high':amp_high}
+        'noise_mid':amp_mid,'noise_high':amp_high}
 
-        ipc.msg_transmission(TRANSMIT_AQ_DATA_EVENT,data)
-        ipc.msg_lcd(TRANSMIT_AQ_DATA_EVENT,{'temperature':temp})
+        air_quality.ipc.msg_transmission(TRANSMIT_AQ_DATA_EVENT,data)
+        air_quality.ipc.msg_lcd(TRANSMIT_AQ_DATA_EVENT,{'temperature':temp})
 
         time.sleep(SAMPLE_INTERVAL-NOISE_SAMPLE_DUR)
 

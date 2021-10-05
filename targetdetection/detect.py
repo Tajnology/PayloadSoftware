@@ -43,7 +43,7 @@ def aruco_marker(frame,type):
         for (markerCorners,markerID) in zip(corners,ids):
             # Extract the marker corners (top left, top right, bottom right, bottom left)
             # and append the tuple to the output array
-            markers.append({'corners':markerCorner.reshape(4,2),'id':markerID})
+            markers.append({'corners':markerCorners.reshape(4,2),'id':markerID})
 
         return markers
     else:

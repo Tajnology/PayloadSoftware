@@ -1,22 +1,22 @@
 import socketio
 
-from main import set_target_image, set_temperature, LCD_PORT, RECEIVE_IMAGE_EVENT, RECEIVE_TEMPERATURE_EVENT
+import lcd.main
 
 def init():
-    sio = socketio.Server(LCD_PORT)
+    sio = socketio.Server(lcd.main.LCD_PORT)
     app = socketio.WGSIApp(sio)
 
     @sio.event
     def connect(sid, environ, auth):
         print('connect', sid)
 
-    @sio.on(RECEIVE_IMAGE_EVENT)
+    @sio.on(lcd.main.RECEIVE_IMAGE_EVENT)
     def receive_image(sid, data):
-        set_target_image(data["image"])
+        lcd.main.set_target_image(data["image"])
 
-    @sio.on(RECEIVE_TEMPERATURE_EVENT)
+    @sio.on(lcd.main.RECEIVE_TEMPERATURE_EVENT)
     def receive_temperature(sid, data):
-        set_temperature(data["temperature"])
+        lcd.main.set_temperature(data["temperature"])
 
     @sio.event
     def disconnect(sid):

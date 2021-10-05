@@ -1,11 +1,11 @@
 import socketio
-from main import INIT_GCS_CLIENT_EVENT, TRANSMISSION_PORT, RECEIVE_TD_DATA_EVENT, RECEIVE_TD_STATUS_EVENT,  RECEIVE_AQ_DATA_EVENT, RECEIVE_AQ_STATUS_EVENT
+import transmission.main
 
 sio_send_connected = False
 sio_send = None
 
 def init():
-    mgr = socketio.RedisManager('redis://localhost:' + str(TRANSMISSION_PORT))
+    mgr = socketio.RedisManager('redis://localhost:' + str(transmission.main.TRANSMISSION_PORT))
     sio_recv = socketio.Server(client_manager = mgr)
     app = socketio.WSGIApp(sio_recv)
 
@@ -13,17 +13,17 @@ def init():
     def connect(sid, environ, auth):
         print('connect', sid)
 
-    @sio_recv.on(RECEIVE_TD_DATA_EVENT)
+    @sio_recv.on(transmission.main.RECEIVE_TD_DATA_EVENT)
     def receive_td_data(sid, data):
         ## TODO: Transmit target detection data to ground control station 
         pass
 
-    @sio_recv.on(RECEIVE_AQ_DATA_EVENT)
+    @sio_recv.on(transmission.main.RECEIVE_AQ_DATA_EVENT)
     def receive_aq_data(sid, data):
         ## TODO: Transmit air quality data to ground control station
         pass
 
-    @sio_recv.on(INIT_GCS_CLIENT_EVENT)
+    @sio_recv.on(transmission.main.INIT_GCS_CLIENT_EVENT)
     def init_client(sid, data):
         sio_send = socketio.Client()
         sio_send.connect('http://' + data['hostname'] + ':' + data['port'])

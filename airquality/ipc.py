@@ -1,6 +1,6 @@
 import socketio
 
-import air_quality.main
+import airquality.main
 
 lcd_connected = False
 transmission_connected = False
