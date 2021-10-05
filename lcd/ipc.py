@@ -1,22 +1,23 @@
 import socketio
 
-import lcd.main
+import main
 
 def init():
-    sio = socketio.Server(lcd.main.LCD_PORT)
-    app = socketio.WGSIApp(sio)
+    mgr = socketio.RedisManager(channel='lcd')
+    sio = socketio.Server(client_manager = mgr)
+    app = socketio.WSGIApp(sio)
 
     @sio.event
     def connect(sid, environ, auth):
         print('connect', sid)
 
-    @sio.on(lcd.main.RECEIVE_IMAGE_EVENT)
+    @sio.on(main.RECEIVE_IMAGE_EVENT)
     def receive_image(sid, data):
-        lcd.main.set_target_image(data["image"])
+        main.set_target_image(data["image"])
 
-    @sio.on(lcd.main.RECEIVE_TEMPERATURE_EVENT)
+    @sio.on(main.RECEIVE_TEMPERATURE_EVENT)
     def receive_temperature(sid, data):
-        lcd.main.set_temperature(data["temperature"])
+        main.set_temperature(data["temperature"])
 
     @sio.event
     def disconnect(sid):

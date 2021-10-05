@@ -2,6 +2,7 @@
 import getopt   # getopt.getopt()
 import time
 import sys
+import os
 from threading import Lock
 from PIL import Image
 from PIL import ImageDraw
@@ -10,8 +11,8 @@ from enum import Enum
 import ST7735 as ST7735
 
 #### LOCAL IMPORTS ####
-import lcd.ipc
-import lcd.utils
+import ipc
+import utils
 
 #### LCD HARDWARE DECLARATION ####
 disp = ST7735.ST7735(
@@ -32,6 +33,7 @@ LCD_PORT = 10000
 REFRESH_INTERVAL = 0.01 # seconds
 RECEIVE_IMAGE_EVENT = 'td-image'
 RECEIVE_TEMPERATURE_EVENT = 'air-data'
+DISPLAY_MODE_FILE = '/home/payload/Code/PayloadSoftware/displaymode/display_mode.txt'
 FONT_SIZE = 20
 
 
@@ -40,7 +42,7 @@ font = ImageFont.truetype("Roboto-Medium.ttf",size=15)
 
 
 #### GLOBAL VARIABLES ####
-ip = lcd.utils.get_ip()
+ip = utils.get_ip()
 target_image = None
 target_image_mutex = Lock()
 temperature = None
@@ -53,12 +55,12 @@ draw = ImageDraw.Draw(render_image)
 #### MAIN PROCEDURE ####
 def main(argv):
     # Establish Inter-Process Communication
-    lcd.ipc.init()
+    ipc.init()
 
     disp.begin() # Initialize the LCD.
 
     while(True):
-        current_display = lcd.utils.get_display_mode()
+        current_display = utils.get_display_mode(DISPLAY_MODE_FILE)
 
         # Render and display image on LCD
         if(current_display == 0):

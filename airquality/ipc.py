@@ -1,6 +1,6 @@
 import socketio
 
-import airquality.main
+import main
 
 lcd_connected = False
 transmission_connected = False
@@ -12,8 +12,8 @@ def init():
     lcd_sio = socketio.Client()
     transmission_sio = socketio.Client()
     
-    lcd_sio.connect('http://localhost:' + air_quality.main.LCD_PORT)
-    transmission_sio.connect('http://localhost:' + air_quality.main.TRANSMISSION_PORT)
+    lcd_sio.connect('redis://localhost:' + str(main.LCD_PORT))
+    transmission_sio.connect('redis://localhost:' + str(main.TRANSMISSION_PORT))
 
     @lcd_sio.on('connect')
     def lcd_connect():

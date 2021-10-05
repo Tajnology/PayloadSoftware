@@ -13,7 +13,7 @@ from enviroplus.noise import Noise
 import sys
 
 #### LOCAL IMPORTS ####
-import airquality.ipc
+import ipc
 
 #### GLOBAL CONSTANTS ####
 LCD_PORT = 10000
@@ -28,11 +28,11 @@ noise = Noise(duration=NOISE_SAMPLE_DUR)
 
 def main(argv):
     # Establish IPC
-    air_quality.ipc.init()
+    ipc.init()
 
-    air_quality.ipc.msg_transmission(TRANSMIT_AQ_STATUS_EVENT,{'heating': True})
+    ipc.msg_transmission(TRANSMIT_AQ_STATUS_EVENT,{'heating': True})
 
-    air_quality.ipc.msg_transmission(TRANSMIT_AQ_STATUS_EVENT,{'heating': False})
+    ipc.msg_transmission(TRANSMIT_AQ_STATUS_EVENT,{'heating': False})
 
     while(True):
         # Microphone will block for up to half a seocond
@@ -47,8 +47,10 @@ def main(argv):
         'amm_gas':gas_data.nh3/1000,'noise_low':amp_low,
         'noise_mid':amp_mid,'noise_high':amp_high}
 
-        air_quality.ipc.msg_transmission(TRANSMIT_AQ_DATA_EVENT,data)
-        air_quality.ipc.msg_lcd(TRANSMIT_AQ_DATA_EVENT,{'temperature':temp})
+        # GCS needs  
+
+        ipc.msg_transmission(TRANSMIT_AQ_DATA_EVENT,data)
+        ipc.msg_lcd(TRANSMIT_AQ_DATA_EVENT,{'temperature':temp})
 
         time.sleep(SAMPLE_INTERVAL-NOISE_SAMPLE_DUR)
 

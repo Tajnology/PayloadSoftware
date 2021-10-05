@@ -43,3 +43,8 @@ python3-opencv
 python-numpy python-pil python-setuptools
 python3-pip python3-cffi python3-rpi.gpio
 libortaudio2
+### Redis
+redis-server
+
+## Additional installation steps:
+Place Roboto-Medium.ttf in ~/.local/share/fonts
