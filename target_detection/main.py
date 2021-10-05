@@ -1,6 +1,7 @@
 
 #### EXTERNAL MODULE IMPORTS ####
 import sys
+from imutils.video import VideoStream
 
 #### LOCAL IMPORTS ####
 import ipc
@@ -14,7 +15,8 @@ TRANSMIT_TD_STATUS_EVENT = 'td-status'
 def main(argv):
     ipc.init()
 
-    pass
+    vs = VideoStream(src=0).start()
+
 
 if __name__ == '__main__':
     main(sys.argv[1:])
