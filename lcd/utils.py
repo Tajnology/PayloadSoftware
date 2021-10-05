@@ -11,15 +11,14 @@ def get_ip():
         s.close()
     return IP
 
+DISPLAY_MODE_MAP = {'IP':0,'TARGET':1, 'TEMP':2}
+
 def get_display_mode(display_mode_file):
     file = open(display_mode_file,'r')
 
-    display_mode_str = file.read()
+    display_mode_str = file.read().strip()
 
     # TODO: Handle the string in the file 
 
     return 0
-
-
-
 
