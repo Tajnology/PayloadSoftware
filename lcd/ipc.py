@@ -3,7 +3,7 @@ import eventlet
 
 import main
 
-def init():
+def init(temperature : main.RefObj, target_image : main.RefObj):
     sio = socketio.Server()
     app = socketio.WSGIApp(sio)
 
@@ -13,11 +13,11 @@ def init():
 
     @sio.on(main.RECEIVE_IMAGE_EVENT)
     def receive_image(sid, data):
-        main.set_target_image(data["image"])
+        target_image.set(data['image'])
 
     @sio.on(main.RECEIVE_TEMPERATURE_EVENT)
     def receive_temperature(sid, data):
-        main.set_temperature(data["temperature"])
+        temperature.set(data['temperature'])
 
     @sio.event
     def disconnect(sid):
