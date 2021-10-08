@@ -35,7 +35,7 @@ TEXT_Y = 10
 
 #### GLOBAL CONSTANTS ####
 LCD_PORT = 10000
-REFRESH_INTERVAL = 0.01 # seconds
+REFRESH_INTERVAL = 0.5 # seconds
 RECEIVE_IMAGE_EVENT = 'td-image'
 RECEIVE_TEMPERATURE_EVENT = 'air-data'
 DISPLAY_MODE_FILE = '/home/payload/Code/PayloadSoftware/displaymode/display_mode.txt'
@@ -96,16 +96,18 @@ def main_loop(temperature : RefObj, target_image: RefObj):
             # Draw IP to display
             draw.text((TEXT_X,TEXT_Y),ip,font=font,fill=255)
         elif(current_display == 1):
-            if(target_image.get() != None):
-                im = Image.open(BytesIO(base64.b64decode(target_image.get())))
-                im.resize((WIDTH,HEIGHT))
+            target_image_val = target_image.get()
+            if(target_image_val != None):
+                im = Image.open(BytesIO(base64.b64decode(target_image_val)))
+                im.thumbnail((WIDTH,HEIGHT),Image.ANTIALIAS)
                 render_image.paste(im,None)
             else:
                 draw.text((TEXT_X,TEXT_Y),"No video feed.",font=font,fill=255)
                 # Draw a 'no image found icon'
         elif current_display == 2:
-            if temperature.get() != None:
-                draw.text((TEXT_X,TEXT_Y),"Temp: " + str(round(temperature.get(),2)) + "C",font=font,fill=255)
+            temperature_val = temperature.get()
+            if temperature_val != None:
+                draw.text((TEXT_X,TEXT_Y),"Temp: " + str(round(temperature_val,2)) + "C",font=font,fill=255)
             else:
                 draw.text((TEXT_X,TEXT_Y),"No temperature data.",font=font,fill=255)
         disp.display(render_image)

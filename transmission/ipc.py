@@ -14,16 +14,25 @@ def init():
     def connect(sid, environ, auth):
         print('connect', sid)
 
-    @sio_recv.on(main.RECEIVE_TD_DATA_EVENT)
-    def receive_td_data(sid, data):
-        ## TODO: Transmit target detection data to ground control station 
-        pass
+    @sio_recv.on(main.TD_IMAGE_EVENT)
+    def receive_td_image(sid,data):
+        msg_gcs(main.TD_IMAGE_EVENT,data)
 
-    @sio_recv.on(main.RECEIVE_AQ_DATA_EVENT)
+    @sio_recv.on(main.TD_DATA_EVENT)
+    def receive_td_data(sid, data):
+        msg_gcs(main.TD_DATA_EVENT,data)
+
+    @sio_recv.on(main.TD_LOG_EVENT)
+    def received_td_logtarget(sid,data):
+        msg_gcs(main.TD_LOG_EVENT,data)
+    
+    @sio_recv.on(main.AQ_DATA_EVENT)
     def receive_aq_data(sid, data):
-        print(data)
-        ## TODO: Transmit air quality data to ground control station
-        pass
+        msg_gcs(main.AQ_DATA_EVENT,data)
+
+    @sio_recv.on(main.AQ_STATUS_EVENT)
+    def receive_aq_status(sid,data):
+        msg_gcs(main.AQ_STATUS_EVENT,{'is_heating':data['heating']})
 
     @sio_recv.on(main.INIT_GCS_CLIENT_EVENT)
     def init_client(sid, data):
@@ -46,14 +55,10 @@ def init():
         print('disconnect', sid)
 
     eventlet.wsgi.server(eventlet.listen(('localhost',main.TRANSMISSION_PORT)), app)
-        
-    
 
 def msg_gcs(key, value):
     if(not sio_send_connected):
-        print('Transmission failed')
         return
     else:
         sio_send.emit(key,value)
-
     

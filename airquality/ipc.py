@@ -17,13 +17,11 @@ def init():
     
     @transmission_sio.event 
     def connect():
-        print('Connected to transmission')
         global transmission_connected
         transmission_connected = True
 
     @transmission_sio.event
     def disconnect():
-        print('Disconnected from transmission')
         global transmission_connected
         transmission_connected = False
 
@@ -42,15 +40,11 @@ def init():
             lcd_sio.connect('http://127.0.0.1:' + str(main.LCD_PORT))
             transmission_sio.connect('http://127.0.0.1:' + str(main.TRANSMISSION_PORT))
         except:
-            print('lcd connected ' + str(lcd_connected))
-            print('transmission connected ' + str(transmission_connected))
+            print('aq connected to lcd? ' + str(lcd_connected))
+            print('aq connected to transmission? ' + str(transmission_connected))
 
         time.sleep(1)
     
-    
-
-    
-
 def msg_transmission(key,value):
     if(not transmission_connected):
         print('Connection failed')

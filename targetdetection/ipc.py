@@ -1,4 +1,5 @@
 import socketio
+import time
 
 import main
 
@@ -34,11 +35,16 @@ def init():
         global transmission_connected
         transmission_connected = False
 
+    while (not lcd_connected) or (not transmission_connected):
+        try:
+            lcd_sio.connect('http://localhost:'+ str(main.LCD_PORT))
+            transmission_sio.connect('http://localhost:' + str(main.TRANSMISSION_PORT))
+        except:
+            print('td connect to lcd? ' + str(lcd_connected))
+            print('td connected to transmission? ' + str(transmission_connected))
+
+        time.sleep(1)
     
-    lcd_sio.connect('http://localhost:'+ str(main.LCD_PORT))
-    transmission_sio.connect('http://localhost:' + str(main.TRANSMISSION_PORT))
-
-
 def msg_transmission(key,value):
     if(not transmission_connected):
         print('Connection failed')

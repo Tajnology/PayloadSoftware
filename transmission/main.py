@@ -9,10 +9,11 @@ import ipc
 #### GLOBAL CONSTANTS ####
 TRANSMISSION_PORT = 10001
 INIT_GCS_CLIENT_EVENT = 'gcs-init'
-RECEIVE_TD_DATA_EVENT = 'td-data'
-RECEIVE_TD_STATUS_EVENT = 'td-status'
-RECEIVE_AQ_DATA_EVENT = 'air-data'
-RECEIVE_AQ_STATUS_EVENT = 'air-data'
+TD_DATA_EVENT = 'td-data'
+TD_IMAGE_EVENT = 'td-image'
+TD_LOG_EVENT = 'td-logtarget'
+AQ_DATA_EVENT = 'air-data'
+AQ_STATUS_EVENT = 'air-status'
 
 
 def main(argv):
