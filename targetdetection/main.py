@@ -6,6 +6,7 @@ import imutils
 import cv2
 import base64
 import time
+import json
 
 #### LOCAL IMPORTS ####
 import ipc
@@ -18,7 +19,7 @@ FRAME_INTERVAL = 0.1 # seconds
 TRANSMIT_TD_IMAGE_EVENT = 'td-image'
 TRANSMIT_TD_DATA_EVENT = 'td-data'
 TRANSMIT_TD_STATUS_EVENT = 'td-status'
-ARUCO_TYPE = "DICT_ARUCO_ORIGINAL"
+ARUCO_TYPE = "DICT_5X5_100"
 FRAME_WIDTH = 1000
 
 def main(argv):
@@ -37,7 +38,7 @@ def main(argv):
 
         if markers != None:
             for marker in markers:
-                target_data['aruco'].append(marker)
+                target_data['aruco'].append(str(marker['id']))
 
                 topLeft = marker['tl']
                 topRight = marker['tr']
@@ -65,7 +66,6 @@ def main(argv):
                     0.5, (0, 255, 0), 2)
 
         #### DETECT BODY ####
-
 
         #### DETECT BACKPACK ####
 

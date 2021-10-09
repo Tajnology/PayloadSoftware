@@ -99,7 +99,7 @@ def main_loop(temperature : RefObj, target_image: RefObj):
             target_image_val = target_image.get()
             if(target_image_val != None):
                 im = Image.open(BytesIO(base64.b64decode(target_image_val)))
-                im.thumbnail((WIDTH,HEIGHT),Image.ANTIALIAS)
+                im.thumbnail((WIDTH,1000),Image.ANTIALIAS)
                 render_image.paste(im,None)
             else:
                 draw.text((TEXT_X,TEXT_Y),"No video feed.",font=font,fill=255)
