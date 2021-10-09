@@ -26,8 +26,8 @@ ARUCO_TARGET = "aruco"
 HUMAN_TARGET = "human"
 BAG_TARGET = "backpack"
 
-human_classifier = cv2.CascadeClassifier('./human_classifier/cascade.xml')
-bag_classifier = cv2.CascadeClassifier('./bag_classifier/cascade.xml')
+human_classifier = cv2.CascadeClassifier('./targetdetection/human_classifier/cascade.xml')
+bag_classifier = cv2.CascadeClassifier('./targetdetection/bag_classifier/cascade.xml')
 
 def detect_human(frame, gray, targets):
     # TODO: params to be confirmed
@@ -58,16 +58,17 @@ def detect_aruco(frame, targets):
 
     if markers != None:
         for marker in markers:
-            topLeft = marker['tl'], bottomRight = marker['br']
+            topLeft = marker['tl']
+            bottomRight = marker['br']
             # convert each of the (x, y)-coordinate pairs to integers
             topLeft = (int(topLeft[0]), int(topLeft[1]))
             bottomRight = (int(bottomRight[0]), int(bottomRight[1]))
-            cv2.rectangle(frame, topLeft, bottomRight, (0,255,0), 2)
+            cv2.rectangle(frame, topLeft, bottomRight, (0,0,255), 2)
             # draw the ArUco marker ID on the frame
             cv2.putText(frame, str(marker['id']),
                 (topLeft[0], topLeft[1] - 15),
                 cv2.FONT_HERSHEY_SIMPLEX,
-                0.5, (0, 255, 0), 2)
+                0.5, (0,0,255), 2)
             
             targets.append(ARUCO_TARGET + " " + str(marker['id']))
     return frame 
