@@ -26,6 +26,48 @@ ARUCO_TARGET = "aruco"
 HUMAN_TARGET = "human"
 BAG_TARGET = "backpack"
 
+def detect_human(frame, targets):
+    #TODO
+    return frame
+
+def detect_bag(frame, targets):
+    #TODO
+    return frame
+
+def detect_aruco(frame, targets):
+    markers = detect.aruco_marker(frame,ARUCO_TYPE)
+
+    if markers != None:
+        for marker in markers:
+            topLeft = marker['tl']
+            topRight = marker['tr']
+            bottomLeft = marker['bl']
+            bottomRight = marker['br']
+            # convert each of the (x, y)-coordinate pairs to integers
+            topRight = (int(topRight[0]), int(topRight[1]))
+            bottomRight = (int(bottomRight[0]), int(bottomRight[1]))
+            bottomLeft = (int(bottomLeft[0]), int(bottomLeft[1]))
+            topLeft = (int(topLeft[0]), int(topLeft[1]))
+            # draw the bounding box of the ArUCo detection
+            cv2.line(frame, topLeft, topRight, (0, 255, 0), 2)
+            cv2.line(frame, topRight, bottomRight, (0, 255, 0), 2)
+            cv2.line(frame, bottomRight, bottomLeft, (0, 255, 0), 2)
+            cv2.line(frame, bottomLeft, topLeft, (0, 255, 0), 2)
+            # compute and draw the center (x, y)-coordinates of the
+            # ArUco marker
+            cX = int((topLeft[0] + bottomRight[0]) / 2.0)
+            cY = int((topLeft[1] + bottomRight[1]) / 2.0)
+            cv2.circle(frame, (cX, cY), 4, (0, 0, 255), -1)
+            # draw the ArUco marker ID on the frame
+            cv2.putText(frame, str(marker['id']),
+                (topLeft[0], topLeft[1] - 15),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.5, (0, 255, 0), 2)
+            
+            targets.append(ARUCO_TARGET + " " + str(marker['id']))
+    return frame 
+
+
 def main(argv):
     ipc.init()
 
@@ -38,43 +80,15 @@ def main(argv):
         targets_detected = [];
 
         #### DETECT ARUCO MARKERS
-        markers = detect.aruco_marker(frame,ARUCO_TYPE)
-
-        if markers != None:
-            for marker in markers:
-                topLeft = marker['tl']
-                topRight = marker['tr']
-                bottomLeft = marker['bl']
-                bottomRight = marker['br']
-                # convert each of the (x, y)-coordinate pairs to integers
-                topRight = (int(topRight[0]), int(topRight[1]))
-                bottomRight = (int(bottomRight[0]), int(bottomRight[1]))
-                bottomLeft = (int(bottomLeft[0]), int(bottomLeft[1]))
-                topLeft = (int(topLeft[0]), int(topLeft[1]))
-                # draw the bounding box of the ArUCo detection
-                cv2.line(edited_frame, topLeft, topRight, (0, 255, 0), 2)
-                cv2.line(edited_frame, topRight, bottomRight, (0, 255, 0), 2)
-                cv2.line(edited_frame, bottomRight, bottomLeft, (0, 255, 0), 2)
-                cv2.line(edited_frame, bottomLeft, topLeft, (0, 255, 0), 2)
-                # compute and draw the center (x, y)-coordinates of the
-                # ArUco marker
-                cX = int((topLeft[0] + bottomRight[0]) / 2.0)
-                cY = int((topLeft[1] + bottomRight[1]) / 2.0)
-                cv2.circle(edited_frame, (cX, cY), 4, (0, 0, 255), -1)
-                # draw the ArUco marker ID on the frame
-                cv2.putText(edited_frame, str(marker['id']),
-                    (topLeft[0], topLeft[1] - 15),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    0.5, (0, 255, 0), 2)
-                
-                targets_detected.append(ARUCO_TARGET + " " + str(marker['id']))
+        edited_frame = detect_aruco(edited_frame, targets_detected)
 
         #### DETECT BODY ####
+        edited_frame = detect_human(edited_frame, targets_detected)
 
         #### DETECT BACKPACK ####
+        edited_frame = detect_bag(edited_frame, targets_detected)
 
         #### SEND ANNOTATED FRAME ####
-
         edited_frame = imutils.resize(edited_frame,width=200)
 
         retval, buffer = cv2.imencode('.jpg', edited_frame)
