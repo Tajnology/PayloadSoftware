@@ -17,8 +17,8 @@ LCD_PORT = 10000
 TRANSMISSION_PORT = 10001
 FRAME_INTERVAL = 0.1 # seconds
 TRANSMIT_TD_IMAGE_EVENT = 'td-image'
-TRANSMIT_TD_DATA_EVENT = 'td-data'
-TRANSMIT_TD_STATUS_EVENT = 'td-status'
+TRANSMIT_TD_STREAMING_EVENT = 'streaming'
+TRANSMIT_TD_TARGET_EVENT = 'target-detected'
 ARUCO_TYPE = "DICT_5X5_100"
 FRAME_WIDTH = 1000
 
@@ -76,8 +76,7 @@ def main(argv):
         retval, buffer = cv2.imencode('.jpg', edited_frame)
         b64img = base64.b64encode(buffer)
         ipc.msg_lcd(TRANSMIT_TD_IMAGE_EVENT,{'image':b64img})
-        ipc.msg_transmission(TRANSMIT_TD_IMAGE_EVENT,{'image':b64img})
-        ipc.msg_transmission(TRANSMIT_TD_DATA_EVENT,target_data)
+        ipc.msg_transmission(TRANSMIT_TD_STREAMING_EVENT,{'image':b64img})
 
         time.sleep(FRAME_INTERVAL)
 
