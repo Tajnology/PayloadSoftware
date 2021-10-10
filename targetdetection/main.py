@@ -22,6 +22,10 @@ TRANSMIT_TD_TARGET_EVENT = 'target-detected'
 ARUCO_TYPE = "DICT_5X5_100"
 FRAME_WIDTH = 1000
 
+ARUCO_TARGET = "aruco"
+HUMAN_TARGET = "human"
+BAG_TARGET = "backpack"
+
 def main(argv):
     ipc.init()
 
@@ -31,7 +35,7 @@ def main(argv):
         frame = vs.read()
         edited_frame = frame
 
-        target_data = {'aruco':[],'body':[],'backpack':[]}
+        targets_detected = [];
 
         #### DETECT ARUCO MARKERS
         markers = detect.aruco_marker(frame,ARUCO_TYPE)
@@ -64,6 +68,8 @@ def main(argv):
                     (topLeft[0], topLeft[1] - 15),
                     cv2.FONT_HERSHEY_SIMPLEX,
                     0.5, (0, 255, 0), 2)
+                
+                targets_detected.append(ARUCO_TARGET)
 
         #### DETECT BODY ####
 
@@ -75,6 +81,10 @@ def main(argv):
 
         retval, buffer = cv2.imencode('.jpg', edited_frame)
         b64img = base64.b64encode(buffer)
+
+        for target in targets_detected:
+             ipc.msg_transmission(TRANSMIT_TD_TARGET_EVENT,{'image':b64img, 'target': target })
+
         ipc.msg_lcd(TRANSMIT_TD_IMAGE_EVENT,{'image':b64img})
         ipc.msg_transmission(TRANSMIT_TD_STREAMING_EVENT,{'image':b64img})
 
