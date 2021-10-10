@@ -42,8 +42,6 @@ def main(argv):
 
         if markers != None:
             for marker in markers:
-                target_data['aruco'].append(str(marker['id']))
-
                 topLeft = marker['tl']
                 topRight = marker['tr']
                 bottomLeft = marker['bl']
@@ -69,7 +67,7 @@ def main(argv):
                     cv2.FONT_HERSHEY_SIMPLEX,
                     0.5, (0, 255, 0), 2)
                 
-                targets_detected.append(ARUCO_TARGET)
+                targets_detected.append(ARUCO_TARGET + " " + str(marker['id']))
 
         #### DETECT BODY ####
 
