@@ -26,12 +26,31 @@ ARUCO_TARGET = "aruco"
 HUMAN_TARGET = "human"
 BAG_TARGET = "backpack"
 
-def detect_human(frame, targets):
-    #TODO
+human_classifier = cv2.CascadeClassifier('./human_classifier/cascade.xml')
+bag_classifier = cv2.CascadeClassifier('./bag_classifier/cascade.xml')
+
+def detect_human(frame, gray, targets):
+    # TODO: params to be confirmed
+    human = human_classifier.detectMultiScale(gray, scaleFactor=1.4, minNeighbors=8, minSize=(150, 150))
+    # TODO: should we change to only draw one?
+    for(hx,hy,hw,hh) in human:
+        cv2.rectangle(frame, (hx,hy), (hx+hw, hy+hh), (255,0,0), 2)
+        cv2.putText(frame, text='HUMAN', org=(hx+hw//2-50, hy+hh+50), 
+                    fontFace=cv2.FONT_HERSHEY_COMPLEX, fontScale=1,
+                    color=(0,0,255), thickness=2)
+        targets.append(HUMAN_TARGET)
     return frame
 
-def detect_bag(frame, targets):
-    #TODO
+def detect_bag(frame, gray, targets):
+    # TODO: params to be confirmed
+    bag = bag_classifier.detectMultiScale(gray, scaleFactor=1.4, minNeighbors=5, minSize=(75, 75))
+    # TODO: should we change to only draw one?
+    for(bx,by,bw,bh) in bag:
+        cv2.rectangle(frame, (bx,by), (bx+bw,by+bh), (0,255,0), 2)
+        cv2.putText(frame, text='BAG', org=(bx+bw//2-50, by+bh+50), 
+                    fontFace=cv2.FONT_HERSHEY_COMPLEX, fontScale=1,
+                    color=(0,0,255), thickness=2)
+        targets.append(BAG_TARGET)            
     return frame
 
 def detect_aruco(frame, targets):
@@ -75,6 +94,7 @@ def main(argv):
 
     while True:
         frame = vs.read()
+        gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         edited_frame = frame
 
         targets_detected = [];
@@ -83,10 +103,10 @@ def main(argv):
         edited_frame = detect_aruco(edited_frame, targets_detected)
 
         #### DETECT BODY ####
-        edited_frame = detect_human(edited_frame, targets_detected)
+        edited_frame = detect_human(edited_frame, gray_frame, targets_detected)
 
         #### DETECT BACKPACK ####
-        edited_frame = detect_bag(edited_frame, targets_detected)
+        edited_frame = detect_bag(edited_frame, gray_frame, targets_detected)
 
         #### SEND ANNOTATED FRAME ####
         edited_frame = imutils.resize(edited_frame,width=200)
