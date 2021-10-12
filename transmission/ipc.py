@@ -53,19 +53,25 @@ def init():
 
     @sio_recv.on(main.INIT_GCS_CLIENT_EVENT)
     def init_client(sid, data):
+        print("Initialise Client")
         global sio_send
         sio_send = socketio.Client()
-        sio_send.connect('http://' + clients[sid]['REMOTE_ADDR'] + ':' + data['port'])
-
+        
         @sio_send.event
-        def connect(sid, environ, auth):
+        def connect():
+            print("GCS Server connected")
             global sio_send_connected
             sio_send_connected = True
 
         @sio_send.event
-        def disconnect(sid, environ, auth):
+        def disconnect():
+            print("GCS Server disconnected")
             global sio_send_connected
             sio_send_connected = False
+
+        url = 'http://' + clients[sid]['REMOTE_ADDR'] + ':' + data['port']
+        print(url)
+        sio_send.connect(url)
     
     @sio_recv.event
     def disconnect(sid):
