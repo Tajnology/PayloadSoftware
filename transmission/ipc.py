@@ -34,7 +34,7 @@ def init():
     def receive_aq_data(sid, data):
         #msg_gcs('oxidising_gases',data['ox_gas'])
         #msg_gcs('reducing_gases',data['red_gas'])
-        #msg_gcs('nh3',data['nh3'])
+        #msg_gcs('nh3',data['amm_gas'])
         msg_gcs('air',data['amm_gas']) # Remove after integration
         msg_gcs('gas',data['ox_gas']) # Remove after integration
         msg_gcs('temperature',data['temperature'])
