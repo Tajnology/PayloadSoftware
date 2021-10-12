@@ -11,7 +11,7 @@ def init():
     sio_recv = socketio.Server()
     app = socketio.WSGIApp(sio_recv)
 
-    clients = []
+    clients = {}
 
     @sio_recv.event
     def connect(sid, environ, auth):
