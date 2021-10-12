@@ -17,19 +17,33 @@ def init():
 
     @sio_recv.on(main.TD_IMAGE_EVENT)
     def receive_td_image(sid,data):
-        msg_gcs(main.TD_IMAGE_EVENT,data)
+        resdata = "data:image/jpeg;base64," + str(data['image'].decode("utf-8"))
+        msg_gcs('streaming',{'image':resdata})
 
     @sio_recv.on(main.TD_DATA_EVENT)
     def receive_td_data(sid, data):
         msg_gcs(main.TD_DATA_EVENT,data)
 
-    @sio_recv.on(main.TD_LOG_EVENT)
+    @sio_recv.on(main.TD_TARGET_EVENT)
     def received_td_logtarget(sid,data):
-        msg_gcs(main.TD_LOG_EVENT,data)
+        resimg = "data:image/jpeg;base64," + str(data['image'].decode("utf-8"))
+        params = {'image':resimg,'label':data['label']}
+        msg_gcs('target_detected',params)
     
     @sio_recv.on(main.AQ_DATA_EVENT)
     def receive_aq_data(sid, data):
-        msg_gcs(main.AQ_DATA_EVENT,data)
+        #msg_gcs('oxidising_gases',data['ox_gas'])
+        #msg_gcs('reducing_gases',data['red_gas'])
+        #msg_gcs('nh3',data['nh3'])
+        msg_gcs('air',data['amm_gas']) # Remove after integration
+        msg_gcs('gas',data['ox_gas']) # Remove after integration
+        msg_gcs('temperature',data['temperature'])
+        msg_gcs('pressure',data['pressure'])
+        msg_gcs('humidity',data['humidity'])
+        msg_gcs('light',data['light'])
+        msg_gcs('noise',data['noise'])
+        
+        # msg_gcs(main.AQ_DATA_EVENT,data) # Old
 
     @sio_recv.on(main.AQ_STATUS_EVENT)
     def receive_aq_status(sid,data):

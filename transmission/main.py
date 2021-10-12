@@ -11,7 +11,7 @@ TRANSMISSION_PORT = 10001
 INIT_GCS_CLIENT_EVENT = 'gcs-init'
 TD_DATA_EVENT = 'td-data'
 TD_IMAGE_EVENT = 'td-image'
-TD_LOG_EVENT = 'td-logtarget'
+TD_TARGET_EVENT = 'target-detected'
 AQ_DATA_EVENT = 'air-data'
 AQ_STATUS_EVENT = 'air-status'
 
