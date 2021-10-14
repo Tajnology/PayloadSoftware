@@ -38,9 +38,6 @@ def main(argv):
     ipc.msg_transmission(TRANSMIT_AQ_STATUS_EVENT,{'heating': False})
 
     while(True):
-        # Microphone will block for up to half a seocond
-        #amp_low, amp_mid, amp_high, amp_total = noise.get_noise_profile()
-        amp_total = 0.0
          
         gas_data = gas.read_all()
         temp = bme280.get_temperature()
@@ -53,7 +50,7 @@ def main(argv):
         data = {'temperature':temp,'pressure':bme280.get_pressure(), # May need to add 
         'humidity':bme280.get_humidity(),'light':ltr559.get_lux(),
         'ox_gas':gas_data.oxidising/1000,'red_gas':gas_data.reducing/1000,
-        'amm_gas':gas_data.nh3/1000,'noise':amp_total}
+        'amm_gas':gas_data.nh3/1000}
         # GCS needs  
 
         ipc.msg_transmission(TRANSMIT_AQ_DATA_EVENT,data)

@@ -102,7 +102,7 @@ def main(argv):
         b64img = base64.b64encode(buffer)
 
         for target in targets_detected:
-             ipc.msg_transmission(TRANSMIT_TD_TARGET_EVENT,{'image':b64img, 'target': target })
+             ipc.msg_transmission(TRANSMIT_TD_TARGET_EVENT,{'image':b64img, 'label': target })
 
         ipc.msg_lcd(TRANSMIT_TD_IMAGE_EVENT,{'image':b64img})
         ipc.msg_transmission(TRANSMIT_TD_STREAMING_EVENT,{'image':b64img})
