@@ -55,9 +55,7 @@ def init():
     def init_client(sid, data):
         global sio_send
         sio_send = socketio.Client()
-        sio_send.connect('http://' + data['hostname'] + ':' + data['port'])
-
-        print(clients[sid])
+        sio_send.connect('http://' + clients[sid]['REMOTE_ADDR'] + ':' + data['port'])
 
         @sio_send.event
         def connect(sid, environ, auth):
