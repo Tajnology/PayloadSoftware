@@ -41,7 +41,6 @@ def init():
         msg_gcs('pressure',data['pressure'])
         msg_gcs('humidity',data['humidity'])
         msg_gcs('light',data['light'])
-        msg_gcs('noise',data['noise'])
         
         # msg_gcs(main.AQ_DATA_EVENT,data) # Old
 
