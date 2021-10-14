@@ -11,9 +11,12 @@ def init():
     sio_recv = socketio.Server()
     app = socketio.WSGIApp(sio_recv)
 
+    clients = []
+
     @sio_recv.event
     def connect(sid, environ, auth):
         print('connect', sid)
+        clients[sid] = environ
 
     @sio_recv.on(main.TD_IMAGE_EVENT)
     def receive_td_image(sid,data):
@@ -53,6 +56,8 @@ def init():
         global sio_send
         sio_send = socketio.Client()
         sio_send.connect('http://' + data['hostname'] + ':' + data['port'])
+
+        print(clients[sid])
 
         @sio_send.event
         def connect(sid, environ, auth):
