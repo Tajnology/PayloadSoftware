@@ -68,7 +68,7 @@ def init():
     def disconnect(sid):
         print('disconnect', sid)
 
-    eventlet.wsgi.server(eventlet.listen(('localhost',main.TRANSMISSION_PORT)), app)
+    eventlet.wsgi.server(eventlet.listen(('0.0.0.0',main.TRANSMISSION_PORT)), app)
 
 def msg_gcs(key, value):
     if(not sio_send_connected):
