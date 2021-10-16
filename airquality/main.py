@@ -1,5 +1,6 @@
 #### EXTERNAL MODULE IMPORTS ####
 import time # time.sleep()
+import os # os.fsync()
 try:
     from ltr559 import LTR559
     ltr559 = LTR559()
@@ -24,15 +25,14 @@ SAMPLE_INTERVAL = 1 # seconds
 NOISE_SAMPLE_DUR = 0.5 # seconds
 TRANSMIT_AQ_DATA_EVENT = 'air-data'
 TRANSMIT_AQ_STATUS_EVENT = 'air-status'
-LOG_GAS_DATA = True
-LOG_FILE_SUFFIX = '1'
+LOG_GAS_DATA = False
+LOG_FILE_SUFFIX = '2'
 
 #### CREATE NOISE OBJECT ####
 sd.default.device = SOUND_DEVICE
 noise = Noise(duration=NOISE_SAMPLE_DUR)
 
-log_gas_file = None
-start_time = None
+
 
 def main(argv):
     # Establish IPC
@@ -41,9 +41,14 @@ def main(argv):
     heating = True
     ipc.msg_transmission(TRANSMIT_AQ_STATUS_EVENT,{'heating': heating})
 
+    log_gas_file = None
+    start_time = None
+
     if(LOG_GAS_DATA):
-        log_gas_file = open('log_gas'+LOG_FILE_SUFFIX+'.txt','rw')
+        log_gas_file = open('log_gas'+LOG_FILE_SUFFIX+'.txt','w')
         log_gas_file.write('time,oxidising,reducing,ammonia\n')
+        log_gas_file.flush()
+        os.fsync(log_gas_file.fileno())
 
         start_time = time.time()
     
@@ -65,7 +70,9 @@ def main(argv):
         'amm_gas':gas_data.nh3/1000}
         # GCS needs  
         if(LOG_GAS_DATA):
-            log_gas_file.write((time.time()-start_time) + ',' + gas_data.oxidising + ',' + gas_data.reducing + ',' + gas_data.nh3 + '\n')
+            log_gas_file.write(str(time.time()-start_time) + ',' + str(gas_data.oxidising) + ',' + str(gas_data.reducing) + ',' + str(gas_data.nh3) + '\n')
+            log_gas_file.flush()
+            os.fsync(log_gas_file.fileno())
 
         ipc.msg_transmission(TRANSMIT_AQ_DATA_EVENT,data)
         ipc.msg_transmission(TRANSMIT_AQ_STATUS_EVENT,{'heating': heating})
