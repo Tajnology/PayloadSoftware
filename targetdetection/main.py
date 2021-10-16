@@ -1,7 +1,7 @@
 
 #### EXTERNAL MODULE IMPORTS ####
 import sys
-from imutils.video import VideoStream
+from imutils.video import VideoStream, FileVideoStream
 import imutils
 import cv2
 import base64
@@ -31,7 +31,7 @@ bag_classifier = cv2.CascadeClassifier('./targetdetection/bag_classifier/cascade
 
 def detect_human(frame, gray, targets):
     # TODO: params to be confirmed
-    human = human_classifier.detectMultiScale(gray, scaleFactor=1.4, minNeighbors=8)
+    human = human_classifier.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=4, minSize=(150,150))
     # TODO: should we change to only draw one?
     for(hx,hy,hw,hh) in human:
         cv2.rectangle(frame, (hx,hy), (hx+hw, hy+hh), (255,0,0), 2)
@@ -43,7 +43,7 @@ def detect_human(frame, gray, targets):
 
 def detect_bag(frame, gray, targets):
     # TODO: params to be confirmed
-    bag = bag_classifier.detectMultiScale(gray, scaleFactor=1.4, minNeighbors=5)
+    bag = bag_classifier.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=2, minSize=(75,75))
     # TODO: should we change to only draw one?
     for(bx,by,bw,bh) in bag:
         cv2.rectangle(frame, (bx,by), (bx+bw,by+bh), (0,255,0), 2)
@@ -78,13 +78,16 @@ def main(argv):
     ipc.init()
 
     vs = VideoStream(src=0,resolution=(1920,1080),framerate=30).start()
+    #vs = FileVideoStream(path='./test_vid_egh455.mp4', queue_size=126).start()
+    #vs = cv2.VideoCapture("./test_vid_egh455.mp4")
+    
 
     while True:
         frame = vs.read()
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         edited_frame = frame
 
-        targets_detected = [];
+        targets_detected = []
 
         #### DETECT ARUCO MARKERS
         edited_frame = detect_aruco(edited_frame, targets_detected)
