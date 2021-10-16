@@ -29,13 +29,16 @@ TRANSMIT_AQ_STATUS_EVENT = 'air-status'
 sd.default.device = SOUND_DEVICE
 noise = Noise(duration=NOISE_SAMPLE_DUR)
 
+
+
 def main(argv):
     # Establish IPC
     ipc.init()
 
-    ipc.msg_transmission(TRANSMIT_AQ_STATUS_EVENT,{'heating': True})
-
-    ipc.msg_transmission(TRANSMIT_AQ_STATUS_EVENT,{'heating': False})
+    heating = True
+    ipc.msg_transmission(TRANSMIT_AQ_STATUS_EVENT,{'heating': heating})
+    
+    heating = False
 
     while(True):
          
@@ -54,6 +57,7 @@ def main(argv):
         # GCS needs  
 
         ipc.msg_transmission(TRANSMIT_AQ_DATA_EVENT,data)
+        ipc.msg_transmission(TRANSMIT_AQ_STATUS_EVENT,{'heating': heating})
         ipc.msg_lcd(TRANSMIT_AQ_DATA_EVENT,{'temperature':temp})
 
         time.sleep(SAMPLE_INTERVAL)
