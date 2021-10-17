@@ -21,6 +21,7 @@ TRANSMIT_TD_STREAMING_EVENT = 'streaming'
 TRANSMIT_TD_TARGET_EVENT = 'target-detected'
 ARUCO_TYPE = "DICT_5X5_100"
 FRAME_WIDTH = 1000
+JPEG_QUALITY = 70 # percent
 
 ARUCO_TARGET = "aruco"
 HUMAN_TARGET = "human"
@@ -98,7 +99,7 @@ def main(argv):
         #### SEND ANNOTATED FRAME ####
         edited_frame = imutils.resize(edited_frame,width=200)
 
-        retval, buffer = cv2.imencode('.jpg', edited_frame)
+        retval, buffer = cv2.imencode('.jpg', edited_frame, [int(cv2.IMWRITE_JPEG_QUALITY),JPEG_QUALITY])
         b64img = base64.b64encode(buffer)
 
         for target in targets_detected:
