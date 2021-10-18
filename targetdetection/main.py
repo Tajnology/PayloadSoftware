@@ -20,7 +20,7 @@ TRANSMIT_TD_IMAGE_EVENT = 'td-image'
 TRANSMIT_TD_TARGET_EVENT = 'target-detected'
 ARUCO_TYPE = "DICT_5X5_100"
 FRAME_WIDTH = 1000
-JPEG_QUALITY = 70 # percent
+JPEG_QUALITY = 85 # percent
 
 ARUCO_TARGET = "aruco"
 HUMAN_TARGET = "human"
