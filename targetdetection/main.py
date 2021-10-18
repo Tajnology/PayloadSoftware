@@ -31,7 +31,7 @@ bag_classifier = cv2.CascadeClassifier('./targetdetection/bag_classifier/cascade
 
 def detect_human(frame, gray, targets):
     # TODO: params to be confirmed
-    human = human_classifier.detectMultiScale(gray, scaleFactor=1.4, minNeighbors=8, minSize=(150, 150))
+    human = human_classifier.detectMultiScale(gray, scaleFactor=1.4, minNeighbors=8)
     # TODO: should we change to only draw one?
     for(hx,hy,hw,hh) in human:
         cv2.rectangle(frame, (hx,hy), (hx+hw, hy+hh), (255,0,0), 2)
@@ -43,7 +43,7 @@ def detect_human(frame, gray, targets):
 
 def detect_bag(frame, gray, targets):
     # TODO: params to be confirmed
-    bag = bag_classifier.detectMultiScale(gray, scaleFactor=1.4, minNeighbors=5, minSize=(75, 75))
+    bag = bag_classifier.detectMultiScale(gray, scaleFactor=1.4, minNeighbors=5)
     # TODO: should we change to only draw one?
     for(bx,by,bw,bh) in bag:
         cv2.rectangle(frame, (bx,by), (bx+bw,by+bh), (0,255,0), 2)
