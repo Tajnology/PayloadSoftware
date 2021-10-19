@@ -23,10 +23,6 @@ def init():
         resdata = "data:image/jpeg;base64," + str(data['image'].decode("utf-8"))
         msg_gcs('streaming',{'image':resdata})
 
-    @sio_recv.on(main.TD_DATA_EVENT)
-    def receive_td_data(sid, data):
-        msg_gcs(main.TD_DATA_EVENT,data)
-
     @sio_recv.on(main.TD_TARGET_EVENT)
     def received_td_logtarget(sid,data):
         resimg = "data:image/jpeg;base64," + str(data['image'].decode("utf-8"))
