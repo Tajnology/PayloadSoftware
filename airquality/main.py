@@ -56,7 +56,7 @@ def main(argv):
         ipc.msg_transmission(TRANSMIT_AQ_DATA_EVENT,data)
         ipc.msg_lcd(TRANSMIT_AQ_DATA_EVENT,{'temperature':temp})
 
-        time.sleep(SAMPLE_INTERVAL-NOISE_SAMPLE_DUR)
+        time.sleep(SAMPLE_INTERVAL)
 
 #### ENTRY POINT ####
 if __name__ == "__main__":

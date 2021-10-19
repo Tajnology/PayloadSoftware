@@ -35,11 +35,11 @@ def init():
     
     @sio_recv.on(main.AQ_DATA_EVENT)
     def receive_aq_data(sid, data):
-        #msg_gcs('oxidising_gases',data['ox_gas'])
-        #msg_gcs('reducing_gases',data['red_gas'])
-        #msg_gcs('nh3',data['amm_gas'])
-        msg_gcs('air',data['amm_gas']) # Remove after integration
-        msg_gcs('gas',data['ox_gas']) # Remove after integration
+        msg_gcs('oxidising_gases',data['ox_gas'])
+        msg_gcs('reducing_gases',data['red_gas'])
+        msg_gcs('nh3',data['amm_gas'])
+        #msg_gcs('air',data['amm_gas']) # Remove after integration
+        #msg_gcs('gas',data['ox_gas']) # Remove after integration
         msg_gcs('temperature',data['temperature'])
         msg_gcs('pressure',data['pressure'])
         msg_gcs('humidity',data['humidity'])
