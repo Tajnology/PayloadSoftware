@@ -32,6 +32,7 @@ sd.default.device = SOUND_DEVICE
 noise = Noise(duration=NOISE_SAMPLE_DUR)
 
 log_gas_file = None
+start_time = None
 
 def main(argv):
     # Establish IPC
@@ -42,7 +43,9 @@ def main(argv):
 
     if(LOG_GAS_DATA):
         log_gas_file = open('log_gas'+LOG_FILE_SUFFIX+'.txt','rw')
-        log_gas_file.write('oxidising,reducing,ammonia\n')
+        log_gas_file.write('time,oxidising,reducing,ammonia\n')
+
+        start_time = time.time()
     
     heating = False
 
@@ -62,7 +65,7 @@ def main(argv):
         'amm_gas':gas_data.nh3/1000}
         # GCS needs  
         if(LOG_GAS_DATA):
-            log_gas_file.write(gas_data.oxidising + ',' + gas_data.reducing + ',' + gas_data.nh3 + '\n')
+            log_gas_file.write((time.time()-start_time) + ',' + gas_data.oxidising + ',' + gas_data.reducing + ',' + gas_data.nh3 + '\n')
 
         ipc.msg_transmission(TRANSMIT_AQ_DATA_EVENT,data)
         ipc.msg_transmission(TRANSMIT_AQ_STATUS_EVENT,{'heating': heating})
