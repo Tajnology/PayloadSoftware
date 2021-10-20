@@ -24,12 +24,14 @@ SAMPLE_INTERVAL = 1 # seconds
 NOISE_SAMPLE_DUR = 0.5 # seconds
 TRANSMIT_AQ_DATA_EVENT = 'air-data'
 TRANSMIT_AQ_STATUS_EVENT = 'air-status'
+LOG_GAS_DATA = True
+LOG_FILE_SUFFIX = '1'
 
 #### CREATE NOISE OBJECT ####
 sd.default.device = SOUND_DEVICE
 noise = Noise(duration=NOISE_SAMPLE_DUR)
 
-
+log_gas_file = None
 
 def main(argv):
     # Establish IPC
@@ -37,6 +39,10 @@ def main(argv):
 
     heating = True
     ipc.msg_transmission(TRANSMIT_AQ_STATUS_EVENT,{'heating': heating})
+
+    if(LOG_GAS_DATA):
+        log_gas_file = open('log_gas'+LOG_FILE_SUFFIX+'.txt','rw')
+        log_gas_file.write('oxidising,reducing,ammonia\n')
     
     heating = False
 
@@ -55,6 +61,8 @@ def main(argv):
         'ox_gas':gas_data.oxidising/1000,'red_gas':gas_data.reducing/1000,
         'amm_gas':gas_data.nh3/1000}
         # GCS needs  
+        if(LOG_GAS_DATA):
+            log_gas_file.write(gas_data.oxidising + ',' + gas_data.reducing + ',' + gas_data.nh3 + '\n')
 
         ipc.msg_transmission(TRANSMIT_AQ_DATA_EVENT,data)
         ipc.msg_transmission(TRANSMIT_AQ_STATUS_EVENT,{'heating': heating})
