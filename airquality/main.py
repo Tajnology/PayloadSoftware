@@ -39,6 +39,7 @@ def main(argv):
     ipc.init()
 
     heating = True
+    heating_start = time.time()
     ipc.msg_transmission(TRANSMIT_AQ_STATUS_EVENT,{'heating': heating})
 
     log_gas_file = None
@@ -51,8 +52,6 @@ def main(argv):
         os.fsync(log_gas_file.fileno())
 
         start_time = time.time()
-    
-    heating = False
 
     while(True):
          
@@ -73,6 +72,9 @@ def main(argv):
             log_gas_file.write(str(time.time()-start_time) + ',' + str(gas_data.oxidising) + ',' + str(gas_data.reducing) + ',' + str(gas_data.nh3) + '\n')
             log_gas_file.flush()
             os.fsync(log_gas_file.fileno())
+
+        if time.time() - heating_start > 90:
+            heating=False
 
         ipc.msg_transmission(TRANSMIT_AQ_DATA_EVENT,data)
         ipc.msg_transmission(TRANSMIT_AQ_STATUS_EVENT,{'heating': heating})
