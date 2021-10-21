@@ -58,6 +58,7 @@ def init():
             print("GCS Server connected")
             global sio_send_connected
             sio_send_connected = True
+            msg_gcs('checkClient','raspberry')
 
         @sio_send.event
         def disconnect():
