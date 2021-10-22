@@ -16,6 +16,7 @@ import detect
 LCD_PORT = 10000
 TRANSMISSION_PORT = 10001
 FRAME_INTERVAL = 0.1 # seconds
+TARGET_INTERVAL = 1 # seconds
 TRANSMIT_TD_IMAGE_EVENT = 'td-image'
 TRANSMIT_TD_TARGET_EVENT = 'target-detected'
 ARUCO_TYPE = "DICT_5X5_100"
@@ -81,6 +82,7 @@ def main(argv):
     #vs = FileVideoStream(path='./test_vid_egh455.mp4', queue_size=126).start()
     #vs = cv2.VideoCapture("./test_vid_egh455.mp4")
     
+    prev_target = time.time()
 
     while True:
         frame = vs.read()
@@ -104,8 +106,11 @@ def main(argv):
         retval, buffer = cv2.imencode('.jpg', edited_frame, [int(cv2.IMWRITE_JPEG_QUALITY),JPEG_QUALITY])
         b64img = base64.b64encode(buffer)
 
-        for target in targets_detected:
-             ipc.msg_transmission(TRANSMIT_TD_TARGET_EVENT,{'image':b64img, 'label': target })
+        curr_time = time.time()
+        if(curr_time > (prev_target + TARGET_INTERVAL)):
+            prev_target = curr_time
+            for target in targets_detected:
+                ipc.msg_transmission(TRANSMIT_TD_TARGET_EVENT,{'image':b64img, 'label': target })
 
         ipc.msg_lcd(TRANSMIT_TD_IMAGE_EVENT,{'image':b64img})
         ipc.msg_transmission(TRANSMIT_TD_IMAGE_EVENT,{'image':b64img})
